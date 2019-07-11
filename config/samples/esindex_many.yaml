@@ -1,0 +1,151 @@
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index1
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index1
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index2
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index2
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index3
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index3
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index4
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index4
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index5
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index5
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index6
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index6
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index7
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index7
+  numberOfShards: 3
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index8
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index8
+  numberOfShards: 3
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index9
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index9
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index10
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index10
+  numberOfShards: 3
+  numberOfReplicas: 2
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index11
+spec:
+  bindingFrom: 
+    name: es-test-binding
+  indexName: index11
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+#apiVersion: ibmcloud.ibm.com/v1alpha1
+#kind: Binding
+#metadata:
+#  labels:
+#    controller-tools.k8s.io: "1.0"
+#  name: es-test-binding
+#spec:
+#  serviceName: es-test
