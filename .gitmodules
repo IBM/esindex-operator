@@ -1,3 +1,0 @@
-[submodule "vendor/github.com/ibm/cloud-operators"]
-	path = vendor/github.com/ibm/cloud-operators
-	url = https://github.com/IBM/cloud-operators
