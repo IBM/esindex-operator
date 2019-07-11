@@ -1,0 +1,4 @@
+channels:
+- currentCSV: ibmcloud-esindex-operator.v0.1.0
+  name: alpha
+packageName: ibmcloud-esindex-operator
