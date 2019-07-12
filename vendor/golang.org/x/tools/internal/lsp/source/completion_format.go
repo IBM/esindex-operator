@@ -14,10 +14,11 @@ import (
 	"strings"
 
 	"golang.org/x/tools/internal/lsp/snippet"
+	"golang.org/x/tools/internal/span"
 )
 
 // formatCompletion creates a completion item for a given candidate.
-func (c *completer) item(cand candidate) CompletionItem {
+func (c *completer) item(cand candidate) (CompletionItem, error) {
 	obj := cand.obj
 
 	// Handle builtin types separately.
@@ -26,7 +27,7 @@ func (c *completer) item(cand candidate) CompletionItem {
 	}
 
 	var (
-		label              = obj.Name()
+		label              = c.deepState.chainString(obj.Name())
 		detail             = types.TypeString(obj.Type(), c.qf)
 		insert             = label
 		kind               CompletionItemKind
@@ -38,9 +39,9 @@ func (c *completer) item(cand candidate) CompletionItem {
 	// to that of an invocation of sig.
 	expandFuncCall := func(sig *types.Signature) {
 		params := formatParams(sig.Params(), sig.Variadic(), c.qf)
+		plainSnippet, placeholderSnippet = c.functionCallSnippets(label, params)
 		results, writeParens := formatResults(sig.Results(), c.qf)
-		label, detail = formatFunction(obj.Name(), params, results, writeParens)
-		plainSnippet, placeholderSnippet = c.functionCallSnippets(obj.Name(), params)
+		detail = "func" + formatFunction(params, results, writeParens)
 	}
 
 	switch obj := obj.(type) {
@@ -69,7 +70,6 @@ func (c *completer) item(cand candidate) CompletionItem {
 		if !ok {
 			break
 		}
-
 		kind = FunctionCompletionItem
 		if sig != nil && sig.Recv() != nil {
 			kind = MethodCompletionItem
@@ -84,16 +84,45 @@ func (c *completer) item(cand candidate) CompletionItem {
 	}
 
 	detail = strings.TrimPrefix(detail, "untyped ")
-
-	return CompletionItem{
+	item := CompletionItem{
 		Label:              label,
 		InsertText:         insert,
 		Detail:             detail,
 		Kind:               kind,
 		Score:              cand.score,
+		Depth:              len(c.deepState.chain),
 		plainSnippet:       plainSnippet,
 		placeholderSnippet: placeholderSnippet,
 	}
+	if c.opts.WantDocumentaton {
+		declRange, err := objToRange(c.ctx, c.view.Session().Cache().FileSet(), obj)
+		if err != nil {
+			return CompletionItem{}, err
+		}
+		pos := declRange.FileSet.Position(declRange.Start)
+		if !pos.IsValid() {
+			return CompletionItem{}, fmt.Errorf("invalid declaration position for %v", item.Label)
+		}
+		uri := span.FileURI(pos.Filename)
+		f, err := c.view.GetFile(c.ctx, uri)
+		if err != nil {
+			return CompletionItem{}, err
+		}
+		gof, ok := f.(GoFile)
+		if !ok {
+			return CompletionItem{}, fmt.Errorf("declaration for %s not in a Go file: %s", item.Label, uri)
+		}
+		ident, err := Identifier(c.ctx, c.view, gof, declRange.Start)
+		if err != nil {
+			return CompletionItem{}, err
+		}
+		documentation, err := ident.Documentation(c.ctx, SynopsisDocumentation)
+		if err != nil {
+			return CompletionItem{}, err
+		}
+		item.Documentation = documentation
+	}
+	return item, nil
 }
 
 // isParameter returns true if the given *types.Var is a parameter
@@ -110,9 +139,8 @@ func (c *completer) isParameter(v *types.Var) bool {
 	return false
 }
 
-func (c *completer) formatBuiltin(cand candidate) CompletionItem {
+func (c *completer) formatBuiltin(cand candidate) (CompletionItem, error) {
 	obj := cand.obj
-
 	item := CompletionItem{
 		Label:      obj.Name(),
 		InsertText: obj.Name(),
@@ -129,7 +157,8 @@ func (c *completer) formatBuiltin(cand candidate) CompletionItem {
 		}
 		params, _ := formatFieldList(c.ctx, c.view, decl.Type.Params)
 		results, writeResultParens := formatFieldList(c.ctx, c.view, decl.Type.Results)
-		item.Label, item.Detail = formatFunction(obj.Name(), params, results, writeResultParens)
+		item.Label = obj.Name()
+		item.Detail = "func" + formatFunction(params, results, writeResultParens)
 		item.plainSnippet, item.placeholderSnippet = c.functionCallSnippets(obj.Name(), params)
 	case *types.TypeName:
 		if types.IsInterface(obj.Type()) {
@@ -140,7 +169,7 @@ func (c *completer) formatBuiltin(cand candidate) CompletionItem {
 	case *types.Nil:
 		item.Kind = VariableCompletionItem
 	}
-	return item
+	return item, nil
 }
 
 var replacer = strings.NewReplacer(

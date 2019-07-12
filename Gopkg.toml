@@ -18,10 +18,6 @@ required = [
 [prune]
   go-tests = true
 
-[[constraint]]
-  name = "github.com/ibm/cloud-operators"
-  source = "git@github.com:ibm/cloud-operators.git"
-
 [[override]]
   name = "k8s.io/api"
   version = "kubernetes-1.13.1"

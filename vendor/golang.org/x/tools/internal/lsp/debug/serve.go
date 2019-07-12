@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"sync"
 
+	"golang.org/x/tools/internal/lsp/telemetry/metric"
 	"golang.org/x/tools/internal/span"
 )
 
@@ -212,6 +213,8 @@ func Serve(ctx context.Context, addr string) error {
 		return err
 	}
 	log.Printf("Debug serving on port: %d", listener.Addr().(*net.TCPAddr).Port)
+	prometheus := prometheus{}
+	metric.RegisterObservers(prometheus.observeMetric)
 	go func() {
 		mux := http.NewServeMux()
 		mux.HandleFunc("/", Render(mainTmpl, func(*http.Request) interface{} { return data }))
@@ -221,6 +224,7 @@ func Serve(ctx context.Context, addr string) error {
 		mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
 		mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
 		mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
+		mux.HandleFunc("/metrics/", prometheus.serve)
 		mux.HandleFunc("/cache/", Render(cacheTmpl, getCache))
 		mux.HandleFunc("/session/", Render(sessionTmpl, getSession))
 		mux.HandleFunc("/view/", Render(viewTmpl, getView))
@@ -283,7 +287,7 @@ td.value {
 <a href="/">Main</a>
 <a href="/info">Info</a>
 <a href="/memory">Memory</a>
-<a href="/debug/">Debug</a>
+<a href="/metrics">Metrics</a>
 <hr>
 <h1>{{template "title" .}}</h1>
 {{block "body" .}}
@@ -354,6 +358,8 @@ var debugTmpl = template.Must(template.Must(BaseTemplate.Clone()).Parse(`
 {{define "title"}}GoPls Debug pages{{end}}
 {{define "body"}}
 <a href="/debug/pprof">Profiling</a>
+<a href="/debug/rpcz">RPCz</a>
+<a href="/debug/tracez">Tracez</a>
 {{end}}
 `))
 

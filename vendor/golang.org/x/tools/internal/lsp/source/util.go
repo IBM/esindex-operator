@@ -38,18 +38,20 @@ func fieldSelections(T types.Type) (fields []*types.Var) {
 	// selections that match more than one field/method.
 	// types.NewSelectionSet should do that for us.
 
-	seen := make(map[types.Type]bool) // for termination on recursive types
+	seen := make(map[*types.Var]bool) // for termination on recursive types
+
 	var visit func(T types.Type)
 	visit = func(T types.Type) {
-		if !seen[T] {
-			seen[T] = true
-			if T, ok := deref(T).Underlying().(*types.Struct); ok {
-				for i := 0; i < T.NumFields(); i++ {
-					f := T.Field(i)
-					fields = append(fields, f)
-					if f.Anonymous() {
-						visit(f.Type())
-					}
+		if T, ok := deref(T).Underlying().(*types.Struct); ok {
+			for i := 0; i < T.NumFields(); i++ {
+				f := T.Field(i)
+				if seen[f] {
+					continue
+				}
+				seen[f] = true
+				fields = append(fields, f)
+				if f.Anonymous() {
+					visit(f.Type())
 				}
 			}
 		}
@@ -137,6 +139,27 @@ func isFunc(obj types.Object) bool {
 	return ok
 }
 
+// typeConversion returns the type being converted to if call is a type
+// conversion expression.
+func typeConversion(call *ast.CallExpr, info *types.Info) types.Type {
+	var ident *ast.Ident
+	switch expr := call.Fun.(type) {
+	case *ast.Ident:
+		ident = expr
+	case *ast.SelectorExpr:
+		ident = expr.Sel
+	default:
+		return nil
+	}
+
+	// Type conversion (e.g. "float64(foo)").
+	if fun, _ := info.ObjectOf(ident).(*types.TypeName); fun != nil {
+		return fun.Type()
+	}
+
+	return nil
+}
+
 func formatParams(tup *types.Tuple, variadic bool, qf types.Qualifier) []string {
 	params := make([]string, 0, tup.Len())
 	for i := 0; i < tup.Len(); i++ {
@@ -196,17 +219,22 @@ func formatType(typ types.Type, qf types.Qualifier) (detail string, kind Complet
 	return detail, kind
 }
 
-func formatFunction(name string, params []string, results []string, writeResultParens bool) (string, string) {
-	var label, detail strings.Builder
-	label.WriteString(name)
-	label.WriteByte('(')
+func formatFunction(params []string, results []string, writeResultParens bool) string {
+	var detail strings.Builder
+
+	detail.WriteByte('(')
 	for i, p := range params {
 		if i > 0 {
-			label.WriteString(", ")
+			detail.WriteString(", ")
 		}
-		label.WriteString(p)
+		detail.WriteString(p)
 	}
-	label.WriteByte(')')
+	detail.WriteByte(')')
+
+	// Add space between parameters and results.
+	if len(results) > 0 {
+		detail.WriteByte(' ')
+	}
 
 	if writeResultParens {
 		detail.WriteByte('(')
@@ -221,5 +249,5 @@ func formatFunction(name string, params []string, results []string, writeResultP
 		detail.WriteByte(')')
 	}
 
-	return label.String(), detail.String()
+	return detail.String()
 }
