@@ -12,7 +12,7 @@ The IBM Cloud Operator for Elastic Search Indices provides a Kubernetes CRD-Base
 
 ## Prerequisites 
 
-* Install IBM Cloud Operators for Services and Bindings: https://github.com/IBM/cloud-operators
+* Install IBM Cloud Operators for Services and Bindings: https://operatorhub.io/operator/ibmcloud-operator
 
 ## Install
 
