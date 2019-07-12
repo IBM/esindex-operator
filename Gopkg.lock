@@ -2,40 +2,12 @@
 
 
 [[projects]]
-  digest = "1:9703ddae5a406920d5e28bd2c13fed701180bcde8a2dcfa5f62491937e38df26"
+  digest = "1:aa0619952f865ccdc14460d76b4207316d673bf84556796af10a75b6b94fa183"
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
   pruneopts = "T"
-  revision = "457ea5c15ccf3b87db582c450e80101989da35f7"
-  version = "v0.40.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:cb7859d5d698d1c640805f8ce5ee0d7a557dea0c2c9dbf7e1ea69e21f022eae1"
-  name = "github.com/IBM-Cloud/bluemix-go"
-  packages = [
-    ".",
-    "api/account/accountv2",
-    "api/iam/iamv1",
-    "api/mccp/mccpv2",
-    "api/resource/resourcev1/catalog",
-    "api/resource/resourcev1/controller",
-    "api/resource/resourcev1/management",
-    "authentication",
-    "bmxerror",
-    "client",
-    "crn",
-    "endpoints",
-    "helpers",
-    "http",
-    "models",
-    "rest",
-    "session",
-    "trace",
-    "utils",
-  ]
-  pruneopts = "T"
-  revision = "bb3b669b44220c27049454aa609c02f690276ca6"
+  revision = "cf81fad90a1a1de334c4fc27e23eb9a4224b627a"
+  version = "v0.41.0"
 
 [[projects]]
   digest = "1:464aef731a5f82ded547c62e249a2e9ec59fbbc9ddab53cda7b9857852630a61"
@@ -117,14 +89,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:fdd1399bcba383bf3cd94862c7280c76b241e33c518bf018fcb2ebbc326961a9"
+  digest = "1:27393e8358fc10ff53201983a39e79cc90efe6376bdce08c27dc8a0a83109545"
   name = "github.com/golang/groupcache"
   packages = ["lru"]
   pruneopts = "T"
-  revision = "5b532d6fd5efaf7fa130d4e859a2fde0fc3a9e1b"
+  revision = "869f871628b6baa9cfbc11732cdf6546b17c1298"
 
 [[projects]]
-  digest = "1:c06028bbc52478d997bbc08facb0c315aabc2295094d7bf8833756aa9aa25504"
+  digest = "1:ee6b8c03e5ab6cf9628a3c538430d007f8534483dc46c7ff5955a4359d5ef865"
   name = "github.com/golang/protobuf"
   packages = [
     "proto",
@@ -134,8 +106,8 @@
     "ptypes/timestamp",
   ]
   pruneopts = "T"
-  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
-  version = "v1.3.1"
+  revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:0bfbe13936953a98ae3cfe8ed6670d396ad81edf069a806d2f6515d7bb6950df"
@@ -211,25 +183,19 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7af480e18bfa03ceac5a98ea4a35aac1ca28cdb63bb3000d93dcddacfcc7d76b"
+  digest = "1:0f779a97b8d6a7bbd3fad10b9a3bee246d1b8313741cd824c876eaf13bcdfa65"
   name = "github.com/ibm/cloud-operators"
   packages = [
     "pkg/apis",
     "pkg/apis/ibmcloud/v1alpha1",
     "pkg/context",
-    "pkg/controller/binding",
-    "pkg/controller/common",
-    "pkg/controller/service",
     "pkg/lib/event",
     "pkg/lib/ibmcloud/v1",
-    "pkg/lib/keyvalue/v1",
     "pkg/lib/resource/v1",
-    "pkg/lib/secret",
     "pkg/util",
   ]
   pruneopts = "T"
-  revision = "dcc5f6332c649de153b41979278ff44bcca81ac2"
-  source = "git@github.ibm.com:seed/cloud-operators.git"
+  revision = "455f35bc9a9a573c6b7a686e5970e03164eafbe7"
 
 [[projects]]
   digest = "1:f53ef9250fa86a357d164aa5188ff02762a6b0ee5129671ad231ed6ba986b4c5"
@@ -410,15 +376,15 @@
   version = "v0.6.0"
 
 [[projects]]
-  digest = "1:85c103ca4b3e832f5a248480a3765b4d46c145cce8bf9d9fad6bf37f812e1c6f"
+  digest = "1:c9bed782ef749abc80f99818c825498025292ae3c976b88f5761ca630eb54c59"
   name = "github.com/prometheus/procfs"
   packages = [
     ".",
     "internal/fs",
   ]
   pruneopts = "T"
-  revision = "833678b5bb319f2d20a475cb165c6cc59c2cc77c"
-  version = "v0.0.2"
+  revision = "3f98efb27840a48a7a2898ec80be07674d19f9c8"
+  version = "v0.0.3"
 
 [[projects]]
   digest = "1:5e2ebcff4614ac5a6d9abbbaaa6df76082658d797621f2a25e54c5e5e4203161"
@@ -492,11 +458,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1c0dae943069350848743458cfde5e3a2e19d47dce90adb8cba808d3da834e4d"
+  digest = "1:e31be034fd6b7057f387bf33683b2a4a2468d299bc311ff45f8dc269a8ea046b"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   pruneopts = "T"
-  revision = "ea8f1a30c4438cc8b13f05538385ad8dc6049b43"
+  revision = "4def268fd1a49955bfb3dda92fe3db4f924f2285"
 
 [[projects]]
   branch = "master"
@@ -512,10 +478,9 @@
     "http2",
     "http2/hpack",
     "idna",
-    "websocket",
   ]
   pruneopts = "T"
-  revision = "3b0461eec859c4b73bb64fdc8285971fd33e3938"
+  revision = "da137c7871d730100384dbcf36e6f8fa493aef5b"
 
 [[projects]]
   branch = "master"
@@ -533,14 +498,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2f095fbc28f00a5c4174cdd17836c9c0796b3fa07da2a18be8704ccbb75da254"
+  digest = "1:3c640454bd024a533e794f69066ffa66286c3f1077e0104808886a68fea1e9d3"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "T"
-  revision = "06bbe82148b16dfec13e08ba9f49df393f6af499"
+  revision = "fae7ac547cb717d141c433a2a173315e216b64c4"
 
 [[projects]]
   digest = "1:0a6103b1dc59b52f7e64a491b398b854c0fcaacde43c25ce468610a64311b72d"
@@ -589,7 +554,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:db1323e40ae75623383a4893e98c60cd2466933acc01b4436121339628c21895"
+  digest = "1:ac8b20b1de9e156a44f201f7b92f1f98189572aae8eb35e33b2045898a40a5c5"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -606,7 +571,7 @@
     "internal/semver",
   ]
   pruneopts = "T"
-  revision = "1fa568393b23e69144eafde9840835928bb33567"
+  revision = "9a621aea19f8341c01da59e0d42dd97700f677d0"
 
 [[projects]]
   digest = "1:04b9a99f5ff102323281698000a18c2daabde66baea55fe74941d6c82ed715a8"
@@ -847,7 +812,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:49ac4e39f9cc9016d4f07a609ac445d007d27d73f65933483112f3d37caf7230"
+  digest = "1:cd145525e3522a3d5bb1a3c55a6efed0e92af640d483213d4712fcfdbaababc3"
   name = "k8s.io/code-generator"
   packages = [
     "cmd/deepcopy-gen",
@@ -855,7 +820,7 @@
     "pkg/util",
   ]
   pruneopts = "T"
-  revision = "d55040311883850cc5acf9472f2b8098f7b48f22"
+  revision = "bc18bbf3b8f35fcf946d081b40010e2bfea4a2d3"
 
 [[projects]]
   branch = "master"
@@ -883,11 +848,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:03c441cccbde6cd08b76d77cd943a4e03278a6b8b6f0fd72cbdc11c1500709c9"
+  digest = "1:33086593fcf5158ab2c77f3bf3a2492faae0f7cbe25b9b525d590c7a78714d77"
   name = "k8s.io/kube-openapi"
   packages = ["pkg/util/proto"]
   pruneopts = "T"
-  revision = "db7b694dc208eead64d38030265f702db593fcf2"
+  revision = "33be087ad058f99c78e067996202b60230737e49"
 
 [[projects]]
   digest = "1:ea68d743278f7d58f3ce92c01b98f4ed41613a850e9267909c4274b4d8162008"
@@ -899,7 +864,6 @@
     "pkg/client/apiutil",
     "pkg/client/config",
     "pkg/controller",
-    "pkg/controller/controllerutil",
     "pkg/envtest",
     "pkg/envtest/printer",
     "pkg/event",
@@ -973,19 +937,13 @@
     "github.com/emicklei/go-restful",
     "github.com/ibm/cloud-operators/pkg/apis",
     "github.com/ibm/cloud-operators/pkg/apis/ibmcloud/v1alpha1",
-    "github.com/ibm/cloud-operators/pkg/context",
-    "github.com/ibm/cloud-operators/pkg/controller/binding",
-    "github.com/ibm/cloud-operators/pkg/controller/common",
-    "github.com/ibm/cloud-operators/pkg/lib/ibmcloud/v1",
-    "github.com/ibm/cloud-operators/pkg/lib/keyvalue/v1",
-    "github.com/ibm/cloud-operators/pkg/lib/resource/v1",
     "github.com/onsi/ginkgo",
     "github.com/onsi/gomega",
     "golang.org/x/net/context",
-    "k8s.io/api/apps/v1",
     "k8s.io/api/core/v1",
     "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1",
     "k8s.io/apimachinery/pkg/api/errors",
+    "k8s.io/apimachinery/pkg/api/meta",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/apimachinery/pkg/runtime",
     "k8s.io/apimachinery/pkg/runtime/schema",
@@ -998,7 +956,6 @@
     "sigs.k8s.io/controller-runtime/pkg/client",
     "sigs.k8s.io/controller-runtime/pkg/client/config",
     "sigs.k8s.io/controller-runtime/pkg/controller",
-    "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil",
     "sigs.k8s.io/controller-runtime/pkg/envtest",
     "sigs.k8s.io/controller-runtime/pkg/handler",
     "sigs.k8s.io/controller-runtime/pkg/manager",

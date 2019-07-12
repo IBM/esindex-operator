@@ -27,7 +27,6 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	if err != nil {
 		return nil, err
 	}
-
 	// Find all references to the identifier at the position.
 	ident, err := source.Identifier(ctx, view, f, rng.Start)
 	if err != nil {
@@ -35,16 +34,33 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 	}
 	references, err := ident.References(ctx)
 	if err != nil {
-		return nil, err
+		view.Session().Logger().Errorf(ctx, "no references for %s: %v", ident.Name, err)
+	}
+	if params.Context.IncludeDeclaration {
+		// The declaration of this identifier may not be in the
+		// scope that we search for references, so make sure
+		// it is added to the beginning of the list if IncludeDeclaration
+		// was specified.
+		references = append([]*source.ReferenceInfo{
+			&source.ReferenceInfo{
+				Range: ident.DeclarationRange(),
+			},
+		}, references...)
 	}
 
 	// Get the location of each reference to return as the result.
 	locations := make([]protocol.Location, 0, len(references))
+	seen := make(map[span.Span]bool)
 	for _, ref := range references {
 		refSpan, err := ref.Range.Span()
 		if err != nil {
 			return nil, err
 		}
+		if seen[refSpan] {
+			continue // already added this location
+		}
+		seen[refSpan] = true
+
 		_, refM, err := getSourceFile(ctx, view, refSpan.URI())
 		if err != nil {
 			return nil, err
@@ -53,7 +69,6 @@ func (s *Server) references(ctx context.Context, params *protocol.ReferenceParam
 		if err != nil {
 			return nil, err
 		}
-
 		locations = append(locations, loc)
 	}
 	return locations, nil
