@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.com/IBM/cloud-operators.svg?branch=master)](https://travis-ci.com/IBM/esindex-operator)
+[![Build Status](https://travis-ci.com/IBM/esindex-operator.svg?branch=master)](https://travis-ci.com/IBM/esindex-operator)
 
 # IBM Cloud Operator for ElasticSearch Indices
 The IBM Cloud Operator for Elastic Search Indices provides a Kubernetes CRD-Based API to manage the lifecycle of indices of the Elastic Search service (databases-for-elasticsearch) in IBM public cloud. This operator allows to provision elasticsearch indices from your Kubernetes cluster, using the ESIndex CRD.

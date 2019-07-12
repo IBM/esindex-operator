@@ -27,6 +27,5 @@ spec:
         - ./manager
         image: cloudoperators/esindex-operator:0.1.0
         imagePullPolicy: Always
-        name: esindex-operator
+        name: esindex-controller
       serviceAccountName: esindex-operator
-

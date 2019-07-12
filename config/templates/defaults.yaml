@@ -1,0 +1,79 @@
+# Constants used to package the operator for operator hub
+
+operator_name: esindex-operator
+channel_name: alpha
+maturity: alpha
+image: cloudoperators/esindex-operator
+crd:
+    - kind: EsIndex
+      description: Represents an instance of a Elasticsearch index on IBM Cloud.
+      example: |-
+        {
+          "apiVersion": "ibmcloud.ibm.com/v1alpha1",
+          "kind": "EsIndex",
+          "metadata": {
+            "name": "myindex"
+          },
+          "spec": {
+            "bindingFrom": {
+              "name": "myes-binding"
+            },
+            "indexName": "myindex",
+            "numberOfShards": 2,
+            "numberOfReplicas": 1,
+            "bindOnly": false
+          }
+        }
+      resources:
+        - kind: Secret
+          version: v1
+        - kind: ConfigMap
+          version: v1
+        - kind: Binding
+          version: v1alpha1
+        - kind: Service
+          version: v1alpha1     
+        - kind: EsIndex
+          version: v1alpha1     
+      specDescriptors:        
+        - description: Binding to the elastic search instance where the index should be created
+          displayName: Binding From
+          path: bindingFrom.name
+          x-descriptors:
+            - 'urn:alm:descriptor:text'
+        - description: Name of the index
+          displayName: Index Name
+          path: indexName
+          x-descriptors:
+            - 'urn:alm:descriptor:text'    
+        - description: Number of shards for the index
+          displayName: Number of shards
+          path: numberOfShards
+          x-descriptors:
+            - 'urn:alm:descriptor:com.tectonic.ui:slider'  
+            - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1'
+        - description: Number of replicas for the index
+          displayName: Number of replicas
+          path: numberOfReplicas
+          x-descriptors:
+            - 'urn:alm:descriptor:com.tectonic.ui:slider'  
+            - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1'  
+        - description: Bind only to existing index
+          displayName: Bind Only 
+          path: bindOnly
+          x-descriptors:
+            - 'urn:alm:descriptor:text' 
+      statusDescriptors:
+        - description: Detailed message on current status
+          displayName: Message
+          path: message
+          x-descriptors:
+            - 'urn:alm:descriptor:text'    
+        - description: Current state for the index
+          displayName: State
+          path: state
+          x-descriptors:
+            - 'urn:alm:descriptor:text'    
+ 
+  
+  
