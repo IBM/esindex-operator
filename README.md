@@ -59,7 +59,7 @@ kubectl apply -f config/samples/esindex.yaml
 To find the current git revision for the operator, type:
 
 ```
-kubectl exec -n ibmcloud-operators $(kubectl get pod -l " app=ibmcloud-esindex-operator" -n ibmcloud-operators -o jsonpath='{.items[0].metadata.name}') -- cat git-rev
+kubectl exec -n ibmcloud-operators $(kubectl get pod -l " app=esindex-operator" -n ibmcloud-operators -o jsonpath='{.items[0].metadata.name}') -- cat git-rev
 ```
 
 ## Learn more about how to contribute
