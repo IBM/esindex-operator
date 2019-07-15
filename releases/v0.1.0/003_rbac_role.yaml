@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   creationTimestamp: null
   name: esindex-operator-role
+  labels:
+    app.kubernetes.io/name: esindex-operator
 rules:
 - apiGroups:
   - ibmcloud.ibm.com
