@@ -273,6 +273,10 @@ func (r *ReconcileEsIndex) Reconcile(request reconcile.Request) (reconcile.Resul
 			logt.Error(err, "getIndex returned error", "retry", instance.ObjectMeta.Name)
 			return reconcile.Result{RequeueAfter: retryInterval}, nil
 		}
+		if getResult.StatusCode == 401 { //unauthorized because of wrong binding/secret
+			logt.Error(err, "getIndex returned 401", "wrong binding", instance.Spec.BindingFrom.Name)
+			return reconcile.Result{RequeueAfter: retryInterval}, nil
+		}
 		if getResult.StatusCode == 200 { //index exists, update state to Online
 			updateInstanceStatus(instance, ResourceStateOnline, "Online. "+getResult.Body, instance.ObjectMeta.Generation)
 			logt.Info("getIndex returned 200", "name", instance.ObjectMeta.Name, "state", instance.Status.State, "message", instance.Status.Message)
@@ -298,11 +302,11 @@ func (r *ReconcileEsIndex) Reconcile(request reconcile.Request) (reconcile.Resul
 			r.Status().Update(context, instance)
 			return reconcile.Result{}, nil
 		}
-		// return code is not 200 or 404
-		updateInstanceStatus(instance, ResourceStatePending, "Error from ElasticSearch. "+getResult.Body, instance.Status.Generation)
+
+		// return code is not 200, 401 or 404
+		//updateInstanceStatus(instance, ResourceStatePending, "Error from ElasticSearch. "+getResult.Body, instance.Status.Generation)
 		logt.Info("getIndex returned error", "name", instance.ObjectMeta.Name, "state", instance.Status.State, "message", instance.Status.Message)
-		r.Status().Update(context, instance)
-		return reconcile.Result{}, nil
+		return reconcile.Result{RequeueAfter: retryInterval}, nil
 	}
 
 	//monitor index existence on the remote service
