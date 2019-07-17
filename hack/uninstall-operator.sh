@@ -27,14 +27,5 @@ kubectl delete deployment -l app.kubernetes.io/name=esindex-operator -n ibmcloud
 kubectl delete serviceaccount -l app.kubernetes.io/name=esindex-operator -n ibmcloud-operators
 
 # Delete the role and role binding for the operator
-kubectl delete clusterrole,clusterrolebinding -l app.kubernetes.io/name=esindex-operator  
-
-# delete all namespaced resources
-#kubectl delete ns -l app.kubernetes.io/name=ibmcloud-operator
-
-# delete secrets/config maps left
-#kubectl delete secrets,configmaps -n default -l app.kubernetes.io/name=ibmcloud-operator -n ibmcloud-operators
-
-# delete admission control webhook configurations
-#kubectl delete validatingwebhookconfiguration ibmcloud-validating
-#kubectl delete mutatingwebhookconfiguration ibmcloud-mutating
+kubectl delete clusterrolebinding -l app.kubernetes.io/name=esindex-operator  
+kubectl delete clusterrole esindex-operator-role
