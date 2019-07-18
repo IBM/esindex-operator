@@ -3,11 +3,42 @@ kind: EsIndex
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
-  name: index13
+  name: index14
 spec:
   bindingFrom: 
     name: es-test-binding
+  indexName: raindrop
+  numberOfShards: 2
+  numberOfReplicas: 1
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index15
+spec:
+  esURIComposed:
+    valueFrom:
+      secretKeyRef: 
+        name: test-es-secret
+        key: es-uri
   indexName: rainfall
   numberOfShards: 2
   numberOfReplicas: 1
-  bindOnly: false
+---
+apiVersion: ibmcloud.ibm.com/v1alpha1
+kind: EsIndex
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: index16
+spec:
+  esURIComposed:
+    valueFrom:
+      configMapKeyRef: 
+        name: test-es-configmap
+        key: es-uri
+  indexName: rainbow
+  numberOfShards: 2
+  numberOfReplicas: 1
