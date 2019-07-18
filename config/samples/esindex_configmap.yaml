@@ -3,10 +3,13 @@ kind: EsIndex
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
-  name: index14
+  name: index16
 spec:
-  bindingFrom: 
-    name: es-test-binding
-  indexName: raindrop
+  esURIComposed:
+    valueFrom:
+      configMapKeyRef: 
+        name: test-es-configmap
+        key: es-uri
+  indexName: rainbow
   numberOfShards: 2
   numberOfReplicas: 1
