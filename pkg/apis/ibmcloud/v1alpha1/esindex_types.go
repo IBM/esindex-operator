@@ -24,6 +24,29 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
+// EsURISource defines elasticsearch URI
+type EsURISource struct {
+	// Source for the elasticsearch URI value
+	ValueFrom CredSource `json:"valueFrom,omitempty" protobuf:"bytes,3,opt,name=valueFrom"`
+}
+
+// CredSource specifies a credential source either a Secret or a ConfigMap
+type CredSource struct {
+	// Selects a key of a ConfigMap in the local namespace.
+	// +optional
+	ConfigMapKeyRef *v1.ConfigMapKeySelector `json:"configMapKeyRef,omitempty" protobuf:"bytes,3,opt,name=configMapKeyRef"`
+
+	// Selects a key of a secret in the local namespace
+	// +optional
+	SecretKeyRef *v1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
+}
+
+// BindingSource specifies a Binding source
+type BindingSource struct {
+	// The Secret to select from.
+	v1.LocalObjectReference `json:",inline" protobuf:"bytes,1,opt,name=localObjectReference"`
+}
+
 // EsIndexSpec defines the desired state of EsIndex
 type EsIndexSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
@@ -32,8 +55,13 @@ type EsIndexSpec struct {
 	// Name of Index to be created on elastic search
 	IndexName string `json:"indexName"`
 
-	// Secret name that holds the elastic search access credentials
-	BindingFrom v1.SecretEnvSource `json:"bindingFrom"`
+	// Binding resource name that holds the secret for elastic search credentials
+	// +optional
+	BindingFrom BindingSource `json:"bindingFrom,omitempty"`
+
+	// EsURIComposed is the URI of elasticesearch resource in the format https://<user>:<passwd>@hostname:port. Cannot be used if binding is not empty.
+	// +optional
+	EsURIComposed EsURISource `json:"esURIComposed,omitempty"`
 
 	// Bind to an existing index if true, default value false
 	// +optional

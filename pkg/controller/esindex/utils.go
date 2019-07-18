@@ -26,6 +26,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
+	"strings"
 	"time"
 
 	ibmcloudv1alpha1 "github.com/ibm/cloud-operators/pkg/apis/ibmcloud/v1alpha1"
@@ -124,7 +126,7 @@ func (r *ReconcileEsIndex) createIndex(obj *esindexv1alpha1.EsIndex) (RestResult
 func (r *ReconcileEsIndex) getIndex(obj *esindexv1alpha1.EsIndex) (RestResult, error) {
 	uri, err := r.getESUri(obj)
 	if err != nil {
-		return RestResult{ErrorType: ErrorTypeEsURINotFound}, err
+		return RestResult{ErrorType: ErrorTypeEsURINotFound, Body: err.Error()}, err
 	}
 	uri0 := uri + "/" + obj.Spec.IndexName
 	var body []byte
@@ -143,7 +145,7 @@ func (r *ReconcileEsIndex) deleteIndex(obj *esindexv1alpha1.EsIndex) (RestResult
 
 	uri, err := r.getESUri(obj)
 	if err != nil {
-		return RestResult{ErrorType: ErrorTypeEsURINotFound}, err
+		return RestResult{ErrorType: ErrorTypeEsURINotFound, Body: err.Error()}, err
 	}
 	uri0 := uri + "/" + obj.Spec.IndexName
 	var body []byte
@@ -151,8 +153,39 @@ func (r *ReconcileEsIndex) deleteIndex(obj *esindexv1alpha1.EsIndex) (RestResult
 	return resp, err
 }
 
+// getEsURIComposed gets ES URI from user specified source
+func (r *ReconcileEsIndex) getEsURIComposed(namespace string, composed esindexv1alpha1.EsURISource) (string, error) {
+	if composed.ValueFrom.ConfigMapKeyRef == nil { //not configmap
+		if composed.ValueFrom.SecretKeyRef == nil { //not secret
+			return "", fmt.Errorf("err: neither secretKeyRef nor configMapKeyRef is specified. must specify one of them")
+		}
+		secret, err := r.getSecret(namespace, composed.ValueFrom.SecretKeyRef.Name)
+		if err != nil {
+			return "", err
+		}
+		uri, err := r.getValueFromSecret(secret, composed.ValueFrom.SecretKeyRef.Key)
+		return uri, err
+	}
+	// get from configmap
+	configmap, err := r.getConfigMap(namespace, composed.ValueFrom.ConfigMapKeyRef.Name)
+	if err != nil {
+		return "", err
+	}
+	uri, err := r.getValueFromConfigMap(configmap, composed.ValueFrom.ConfigMapKeyRef.Key)
+	return uri, err
+}
+
 // getESUri : returns elastic search URI
 func (r *ReconcileEsIndex) getESUri(obj *esindexv1alpha1.EsIndex) (string, error) {
+	if obj.Spec.BindingFrom.Name == "" { //cretential is not from binding
+		if reflect.DeepEqual(obj.Spec.EsURIComposed, esindexv1alpha1.EsURISource{}) { //empty object
+			return "", fmt.Errorf("err: neither bindingFrom nor esURIComposed is specified. must specify one of them")
+		}
+		uri, err := r.getEsURIComposed(obj.ObjectMeta.Namespace, obj.Spec.EsURIComposed)
+		return uri, err
+	}
+
+	// cretential is specified in binding
 	binding, err := r.getBinding(obj.ObjectMeta.Namespace, obj.Spec.BindingFrom.Name)
 	if err != nil || len(binding.OwnerReferences) < 1 {
 		logt.Info("failed to get binding", "bindingName", obj.Spec.BindingFrom.Name)
@@ -224,10 +257,21 @@ func (r *ReconcileEsIndex) setCRDOwnerReference(obj *esindexv1alpha1.EsIndex) er
 
 func (r *ReconcileEsIndex) getSecret(namespace string, secretname string) (*v1.Secret, error) {
 	var secret v1.Secret
-	if err := r.Client.Get(context.Background(), client.ObjectKey{Namespace: namespace, Name: secretname}, &secret); err != nil {
+	name := strings.TrimSpace(secretname) //remove whitespaces
+	if err := r.Client.Get(context.Background(), client.ObjectKey{Namespace: namespace, Name: name}, &secret); err != nil {
 		return nil, err
 	}
 	return &secret, nil
+}
+
+func (r *ReconcileEsIndex) getConfigMap(namespace string, configmaptname string) (*v1.ConfigMap, error) {
+	var conf v1.ConfigMap
+	name := strings.TrimSpace(configmaptname) //remove whitespaces
+	if err := r.Client.Get(context.Background(), client.ObjectKey{Namespace: namespace, Name: name}, &conf); err != nil {
+		logt.Error(err, " getConfigMap failed")
+		return nil, err
+	}
+	return &conf, nil
 }
 
 // getBinding: get Binding object
@@ -239,4 +283,40 @@ func (r *ReconcileEsIndex) getBinding(namespace string, bindingName string) (*ib
 		return nil, err
 	}
 	return &binding, nil
+}
+
+func (r *ReconcileEsIndex) getValueFromSecret(secret *v1.Secret, key string) (string, error) {
+
+	datajson, _ := json.Marshal(secret.Data)
+	var mydat map[string]interface{}
+	if err := json.Unmarshal(datajson, &mydat); err != nil {
+		logt.Error(err, "json.Unmarshal of elastic search secret data failed", "secretName", secret.ObjectMeta.Name)
+		return "", err
+	}
+	if mydat[key] == nil {
+		logt.Info("elastic search URI not found in secret", "secretName", secret.ObjectMeta.Name)
+		return "", fmt.Errorf("err: elastic search credentials not found in secret %v", secret.ObjectMeta.Name)
+	}
+
+	uri, err := base64.StdEncoding.DecodeString(mydat[key].(string))
+	if err != nil {
+		logt.Error(err, "base64 decode failed", "connectionBase64encoded", mydat[key].(string))
+		return "", err
+	}
+	return string(uri), nil
+}
+
+func (r *ReconcileEsIndex) getValueFromConfigMap(configmap *v1.ConfigMap, key string) (string, error) {
+
+	datajson, _ := json.Marshal(configmap.Data)
+	var mydat map[string]interface{}
+	if err := json.Unmarshal(datajson, &mydat); err != nil {
+		logt.Error(err, "json.Unmarshal of configmap data failed", "configmapName", configmap.ObjectMeta.Name)
+		return "", err
+	}
+	if mydat[key] == nil {
+		logt.Info("key not found in configmap", "configmapName", configmap.ObjectMeta.Name, "key", key)
+		return "", fmt.Errorf("err: elastic search credentials not found in configmap %v", configmap.ObjectMeta.Name)
+	}
+	return mydat[key].(string), nil
 }

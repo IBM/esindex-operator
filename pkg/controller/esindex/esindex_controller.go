@@ -159,6 +159,7 @@ func DeleteFinalizer(instance *ibmcloudv1alpha1.EsIndex) []string {
 // +kubebuilder:rbac:groups=ibmcloud.ibm.com,resources=esindices/finalizers,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=ibmcloud.ibm.com,resources=bindings,verbs=get;list;watch
 // +kubebuilder:rbac:groups=core,resources=secrets,verbs=get;list;watch
+// +kubebuilder:rbac:groups=core,resources=configmaps,verbs=get;list;watch
 func (r *ReconcileEsIndex) Reconcile(request reconcile.Request) (reconcile.Result, error) {
 	// Fetch the EsIndex instance
 	instance := &ibmcloudv1alpha1.EsIndex{}
@@ -208,12 +209,14 @@ func (r *ReconcileEsIndex) Reconcile(request reconcile.Request) (reconcile.Resul
 		instance.ObjectMeta.Finalizers = append(instance.ObjectMeta.Finalizers, esindexFinalizer)
 		needUpdate = true
 	}
-	// add owner reference to the instance if not exist already
-	if !ContainsOwnerReference(instance) {
-		if err := r.setCRDOwnerReference(instance); err != nil {
-			logt.Error(err, "setCRDOwnerReference", "name", instance.ObjectMeta.Name)
-		} else {
-			needUpdate = true
+	// add owner reference to the instance if not exist already and if bindingFrom is present
+	if instance.Spec.BindingFrom.Name != "" {
+		if !ContainsOwnerReference(instance) {
+			if err := r.setCRDOwnerReference(instance); err != nil {
+				logt.Error(err, "setCRDOwnerReference", "name", instance.ObjectMeta.Name)
+			} else {
+				needUpdate = true
+			}
 		}
 	}
 	if needUpdate {
