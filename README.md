@@ -34,21 +34,27 @@ curl -sL https://raw.githubusercontent.com/IBM/esindex-operator/master/hack/unin
 
 ## Use 
 
-Sample yaml files are provided under config/samples. To create an index, you must have an elasticsearch service instance and a binding instance exsit. Run the following commands to create them.
+Sample yaml files are provided under config/samples. To create an index, you must already have an elasticsearch service instance and a source of elasticsearch access credential. The operator supports three options to specify the source of elasticsearch access credentials:
 
-Create an elasticserch service instance:
+ - Binding.ibmcloud.ibm.com
+ - Secret
+ - ConfigMap
+ 
+User may choose to use anyone of these options.  `esindex.yaml`, `esindex_secret.yaml` and `esindex_configmap.yaml` contain examples for each of them, respectively. The following commands assume the use of Binding.ibmcloud.ibm.com as the source.
+
+1. Create an elasticserch service instance:
 
 ```
 kubectl apply -f config/samples/elasticsearch.yaml
 ```
 
-Create a binding instance:
+2. Create a binding instance:
 
 ```
 kubectl apply -f config/samples/elasticsearch_binding.yaml
 ```
 
-Create an index on the elasticsearch 
+3. Create an index on the elasticsearch:
 
 ```
 kubectl apply -f config/samples/esindex.yaml
