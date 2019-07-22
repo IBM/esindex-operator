@@ -24,12 +24,6 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// EsURISource defines elasticsearch URI
-type EsURISource struct {
-	// Source for the elasticsearch URI value
-	ValueFrom CredSource `json:"valueFrom,omitempty" protobuf:"bytes,3,opt,name=valueFrom"`
-}
-
 // CredSource specifies a credential source either a Secret or a ConfigMap
 type CredSource struct {
 	// Selects a key of a ConfigMap in the local namespace.
@@ -61,7 +55,7 @@ type EsIndexSpec struct {
 
 	// EsURIComposed is the URI of elasticesearch resource in the format https://<user>:<passwd>@hostname:port. Cannot be used if binding is not empty.
 	// +optional
-	EsURIComposed EsURISource `json:"esURIComposed,omitempty"`
+	EsURIComposed CredSource `json:"esURIComposed,omitempty"`
 
 	// Bind to an existing index if true, default value false
 	// +optional
