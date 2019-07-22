@@ -34,7 +34,7 @@ curl -sL https://raw.githubusercontent.com/IBM/esindex-operator/master/hack/unin
 
 ## Use 
 
-Sample yaml files are provided under config/samples. To create an index, you must already have an elasticsearch service instance and a source of elasticsearch access credential. The operator supports three options to specify the source of elasticsearch access credentials:
+Sample yaml files are provided under [config/samples](https://github.com/IBM/esindex-operator/tree/master/config/samples). To create an index, you must already have an elasticsearch service instance and a source of elasticsearch access credential. The operator supports three options to specify the source of elasticsearch access credentials:
 
  - Binding.ibmcloud.ibm.com
  - Secret
