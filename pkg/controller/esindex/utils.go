@@ -154,31 +154,31 @@ func (r *ReconcileEsIndex) deleteIndex(obj *esindexv1alpha1.EsIndex) (RestResult
 }
 
 // getEsURIComposed gets ES URI from user specified source
-func (r *ReconcileEsIndex) getEsURIComposed(namespace string, composed esindexv1alpha1.EsURISource) (string, error) {
-	if composed.ValueFrom.ConfigMapKeyRef == nil { //not configmap
-		if composed.ValueFrom.SecretKeyRef == nil { //not secret
+func (r *ReconcileEsIndex) getEsURIComposed(namespace string, composed esindexv1alpha1.CredSource) (string, error) {
+	if composed.ConfigMapKeyRef == nil { //not configmap
+		if composed.SecretKeyRef == nil { //not secret
 			return "", fmt.Errorf("err: neither secretKeyRef nor configMapKeyRef is specified. must specify one of them")
 		}
-		secret, err := r.getSecret(namespace, composed.ValueFrom.SecretKeyRef.Name)
+		secret, err := r.getSecret(namespace, composed.SecretKeyRef.Name)
 		if err != nil {
 			return "", err
 		}
-		uri, err := r.getValueFromSecret(secret, composed.ValueFrom.SecretKeyRef.Key)
+		uri, err := r.getValueFromSecret(secret, composed.SecretKeyRef.Key)
 		return uri, err
 	}
 	// get from configmap
-	configmap, err := r.getConfigMap(namespace, composed.ValueFrom.ConfigMapKeyRef.Name)
+	configmap, err := r.getConfigMap(namespace, composed.ConfigMapKeyRef.Name)
 	if err != nil {
 		return "", err
 	}
-	uri, err := r.getValueFromConfigMap(configmap, composed.ValueFrom.ConfigMapKeyRef.Key)
+	uri, err := r.getValueFromConfigMap(configmap, composed.ConfigMapKeyRef.Key)
 	return uri, err
 }
 
 // getESUri : returns elastic search URI
 func (r *ReconcileEsIndex) getESUri(obj *esindexv1alpha1.EsIndex) (string, error) {
 	if obj.Spec.BindingFrom.Name == "" { //cretential is not from binding
-		if reflect.DeepEqual(obj.Spec.EsURIComposed, esindexv1alpha1.EsURISource{}) { //empty object
+		if reflect.DeepEqual(obj.Spec.EsURIComposed, esindexv1alpha1.CredSource{}) { //empty object
 			return "", fmt.Errorf("err: neither bindingFrom nor esURIComposed is specified. must specify one of them")
 		}
 		uri, err := r.getEsURIComposed(obj.ObjectMeta.Namespace, obj.Spec.EsURIComposed)

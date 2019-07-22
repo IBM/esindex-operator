@@ -6,10 +6,9 @@ metadata:
   name: index16
 spec:
   esURIComposed:
-    valueFrom:
-      configMapKeyRef: 
-        name: test-es-configmap
-        key: es-uri
+    configMapKeyRef: 
+      name: test-es-configmap
+      key: es-uri
   indexName: rainbow
   numberOfShards: 2
   numberOfReplicas: 1
