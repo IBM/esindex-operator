@@ -163,16 +163,16 @@ func (r *ReconcileEsIndex) getEsURIComposed(namespace string, composed esindexv1
 		if err != nil {
 			return "", err
 		}
-		uri, err := r.getValueFromSecret(secret, composed.SecretKeyRef.Key)
-		return uri, err
+		uri := string(secret.Data[composed.SecretKeyRef.Key])
+		return uri, nil
 	}
 	// get from configmap
 	configmap, err := r.getConfigMap(namespace, composed.ConfigMapKeyRef.Name)
 	if err != nil {
 		return "", err
 	}
-	uri, err := r.getValueFromConfigMap(configmap, composed.ConfigMapKeyRef.Key)
-	return uri, err
+	uri := string(configmap.Data[composed.ConfigMapKeyRef.Key])
+	return uri, nil
 }
 
 // getESUri : returns elastic search URI
@@ -283,40 +283,4 @@ func (r *ReconcileEsIndex) getBinding(namespace string, bindingName string) (*ib
 		return nil, err
 	}
 	return &binding, nil
-}
-
-func (r *ReconcileEsIndex) getValueFromSecret(secret *v1.Secret, key string) (string, error) {
-
-	datajson, _ := json.Marshal(secret.Data)
-	var mydat map[string]interface{}
-	if err := json.Unmarshal(datajson, &mydat); err != nil {
-		logt.Error(err, "json.Unmarshal of elastic search secret data failed", "secretName", secret.ObjectMeta.Name)
-		return "", err
-	}
-	if mydat[key] == nil {
-		logt.Info("elastic search URI not found in secret", "secretName", secret.ObjectMeta.Name)
-		return "", fmt.Errorf("err: elastic search credentials not found in secret %v", secret.ObjectMeta.Name)
-	}
-
-	uri, err := base64.StdEncoding.DecodeString(mydat[key].(string))
-	if err != nil {
-		logt.Error(err, "base64 decode failed", "connectionBase64encoded", mydat[key].(string))
-		return "", err
-	}
-	return string(uri), nil
-}
-
-func (r *ReconcileEsIndex) getValueFromConfigMap(configmap *v1.ConfigMap, key string) (string, error) {
-
-	datajson, _ := json.Marshal(configmap.Data)
-	var mydat map[string]interface{}
-	if err := json.Unmarshal(datajson, &mydat); err != nil {
-		logt.Error(err, "json.Unmarshal of configmap data failed", "configmapName", configmap.ObjectMeta.Name)
-		return "", err
-	}
-	if mydat[key] == nil {
-		logt.Info("key not found in configmap", "configmapName", configmap.ObjectMeta.Name, "key", key)
-		return "", fmt.Errorf("err: elastic search credentials not found in configmap %v", configmap.ObjectMeta.Name)
-	}
-	return mydat[key].(string), nil
 }
