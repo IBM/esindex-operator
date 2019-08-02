@@ -45,7 +45,7 @@ spec:
             esURIComposed:
               description: EsURIComposed is the URI of elasticesearch resource in
                 the format https://<user>:<passwd>@hostname:port. Cannot be used if
-                BindingFrom is not empty.
+                binding is not empty.
               properties:
                 configMapKeyRef:
                   description: Selects a key of a ConfigMap in the local namespace.

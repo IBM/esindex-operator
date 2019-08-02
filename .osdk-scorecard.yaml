@@ -1,0 +1,9 @@
+# request yaml, can be multiples
+cr-manifest:
+  - "deploy/crds/esindex-test.cr.yaml"
+init-timeout: 60
+# CSV file location
+csv-path: "deploy/ibmcloud_operator.v0.1.0.clusterserviceversion.yaml"
+# need this for API validation test
+proxy-image: "quay.io/operator-framework/scorecard-proxy"
+

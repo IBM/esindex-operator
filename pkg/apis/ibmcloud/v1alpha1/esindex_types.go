@@ -53,7 +53,7 @@ type EsIndexSpec struct {
 	// +optional
 	BindingFrom BindingSource `json:"bindingFrom,omitempty"`
 
-	// EsURIComposed is the URI of elasticesearch resource in the format https://<user>:<passwd>@hostname:port. Cannot be used if binding is not empty.
+	// EsURIComposed is the URI of elasticesearch resource in the format https://<user>:<passwd>@hostname:port. Cannot be used if BindingFrom is not empty.
 	// +optional
 	EsURIComposed CredSource `json:"esURIComposed,omitempty"`
 

@@ -32,8 +32,8 @@ else
   SCRIPTS_HOME=$(dirname ${BASH_SOURCE})
 fi
 
-# configure the operator
-${SCRIPTS_HOME}/check-prerequisites.sh
+# check dependencies
+#${SCRIPTS_HOME}/check-prerequisites.sh
 
 # install the operator
 kubectl apply -f ${SCRIPTS_HOME}/../releases/${RELEASE}
