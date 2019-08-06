@@ -228,6 +228,9 @@ with open(os.path.join(config,"templates","template.clusterserviceversion.yaml")
             description = defs['crd'][i]['description']
             crd_name = crd['metadata']['name']
             crd_version = crd['spec']['version']
+            crd_specdescriptors = defs['crd'][i]['specDescriptors']
+            crd_statusdescriptors = defs['crd'][i]['statusDescriptors']
+            crd_resources = defs['crd'][i]['resources']
             # fill in csv
             owned = {}
             owned['description'] = description
@@ -235,6 +238,9 @@ with open(os.path.join(config,"templates","template.clusterserviceversion.yaml")
             owned['kind'] = kind
             owned['name'] = crd_name
             owned['version'] = crd_version
+            owned['specDescriptors'] = crd_specdescriptors
+            owned['statusDescriptors'] = crd_statusdescriptors
+            owned['resources'] =  crd_resources
             csv['spec']['customresourcedefinitions']['owned'].append(owned)
             # add examples
             ex = json.loads(defs['crd'][i]['example'])

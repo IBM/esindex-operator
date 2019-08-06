@@ -6,7 +6,7 @@ maturity: alpha
 image: cloudoperators/esindex-operator
 crd:
     - kind: EsIndex
-      description: Represents an instance of a Elasticsearch index on IBM Cloud.
+      description: Represents an Elasticsearch index
       example: |-
         {
           "apiVersion": "ibmcloud.ibm.com/v1alpha1",
@@ -20,8 +20,7 @@ crd:
             },
             "indexName": "myindex",
             "numberOfShards": 2,
-            "numberOfReplicas": 1,
-            "bindOnly": false
+            "numberOfReplicas": 1
           }
         }
       resources:
@@ -35,45 +34,52 @@ crd:
           version: v1alpha1     
         - kind: EsIndex
           version: v1alpha1     
-      specDescriptors:        
-        - description: Binding to the elastic search instance where the index should be created
-          displayName: Binding From
-          path: bindingFrom.name
-          x-descriptors:
-            - 'urn:alm:descriptor:text'
-        - description: Name of the index
-          displayName: Index Name
-          path: indexName
-          x-descriptors:
-            - 'urn:alm:descriptor:text'    
-        - description: Number of shards for the index
-          displayName: Number of shards
-          path: numberOfShards
-          x-descriptors:
-            - 'urn:alm:descriptor:com.tectonic.ui:slider'  
-            - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1'
-        - description: Number of replicas for the index
-          displayName: Number of replicas
-          path: numberOfReplicas
-          x-descriptors:
-            - 'urn:alm:descriptor:com.tectonic.ui:slider'  
-            - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1'  
-        - description: Bind only to existing index
-          displayName: Bind Only 
-          path: bindOnly
-          x-descriptors:
-            - 'urn:alm:descriptor:text' 
+      specDescriptors:
+      - description: Binding object that holds the secret for elasticsearch credentials
+        displayName: Binding Name
+        path: bindingFrom
+        x-descriptors:
+        - urn:alm:descriptor:text
+      - description: Composed elasticsearch URI from a SecretKeyRef or a ConfigMapKeyRef. Cannot be used if binding is not empty. The vacomposed URI must be in the format https://<user>:<passwd>@hostname:port.
+        displayName: Composed elasticsearch URI from a reference object
+        path: esURIComposed
+        x-descriptors:
+        - urn:alm:descriptor:text
+      - description: Index to be created on elasticsearch
+        displayName: Index Name
+        path: indexName
+        x-descriptors:
+        - urn:alm:descriptor:text
+      - description: Number of replicas
+        displayName: Number of replicas
+        path: numberOfReplicas
+        x-descriptors:
+        - 'urn:alm:descriptor:com.tectonic.ui:slider'  
+        - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1' 
+      - description: Number of shards
+        displayName: Number of shards
+        path: numberOfShards
+        x-descriptors:
+        - 'urn:alm:descriptor:com.tectonic.ui:slider'  
+        - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1' 
       statusDescriptors:
-        - description: Detailed message on current status
-          displayName: Message
-          path: message
-          x-descriptors:
-            - 'urn:alm:descriptor:text'    
-        - description: Current state for the index
-          displayName: State
-          path: state
-          x-descriptors:
-            - 'urn:alm:descriptor:text'    
+      - description: Current state for the index
+        displayName: State
+        path: state
+        x-descriptors:
+        - urn:alm:descriptor:text
+      - description: Detailed message about the current state
+        displayName: Message
+        path: message
+        x-descriptors:
+        - urn:alm:descriptor:text
+      - description: Genreation of spec
+        displayName: Generation
+        path: generation
+        x-descriptors:
+        - 'urn:alm:descriptor:com.tectonic.ui:slider'  
+        - 'urn:alm:descriptor:com.tectonic.ui:sliderStart:1' 
+
  
   
   
