@@ -38,7 +38,7 @@ Sample yaml files are provided under [config/samples](https://github.com/IBM/esi
  - Secret
  - ConfigMap
  
-You may choose to use anyone of these options.  `esindex.yaml`, `esindex_secret.yaml` and `esindex_configmap.yaml` contain examples for each of them, respectively. The following commands assume the use of Binding.ibmcloud.ibm.com as the source.
+You may choose to use any one of these options.  `esindex.yaml`, `esindex_secret.yaml` and `esindex_configmap.yaml` contain examples for each of them, respectively. The following commands assume the use of Binding.ibmcloud.ibm.com as the source.
 
 1. Create an elasticserch service instance on IBM Cloud:
 
