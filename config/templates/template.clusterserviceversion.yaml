@@ -35,14 +35,15 @@ spec:
 
     * **Creation and Deletion** - Creates, deletes and monitors indices on Elastic Search service.
 
-    * **Multiple Credential Source Options** - Elasticsearch access credentials can be provided by refrence 
+    * **Credential Source Options** - Elasticsearch access credentials can be provided by refrence 
     to a IBMCloud Binding, a Secret, or a ConfigMap resource.
     
     ## Requirements
 
     The operator can be installed on any OLM-enabled Kubernetes cluster with version >= 1.11. 
-    It requires the [IBM Cloud Operator](https://operatorhub.io/operator/ibmcloud-operator) 
-    installed on your cluster if using IBMCloud Binding for access credentials.
+    
+    If using IBMCloud Binding for access credential，it requires the [IBM Cloud Operator](https://operatorhub.io/operator/ibmcloud-operator) 
+    installed on your cluster.
     
     ## Using the IBM Cloud Operator
 

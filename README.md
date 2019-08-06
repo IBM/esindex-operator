@@ -10,7 +10,7 @@ The Elastic Search access credentials can be specified in requests via reference
 
 * **Creation and Deletion** - Creates, deletes and monitors indices on Elastic Search service.
 
-* **Multiple Credential Source Options** - Elasticsearch access credentials can be provided by refrence to a IBMCloud Binding, a Secret, or a ConfigMap resource.
+* **Credential Source Options** - Elasticsearch access credentials can be provided by refrence to a IBMCloud Binding, a Secret, or a ConfigMap resource.
 
 ## Install
 
