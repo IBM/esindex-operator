@@ -2,17 +2,15 @@
 [![Build Status](https://travis-ci.com/IBM/esindex-operator.svg?branch=master)](https://travis-ci.com/IBM/esindex-operator)
 
 # IBM Cloud Operator for ElasticSearch Indices
-The IBM Cloud Operator for Elastic Search Indices provides a Kubernetes CRD-Based API to manage the lifecycle of indices of the Elastic Search service (databases-for-elasticsearch) in IBM public cloud. This operator allows to provision elasticsearch indices from your Kubernetes cluster, using the ESIndex CRD.
+The IBM Cloud Operator for Elastic Search Indices, as part of IBM Cloud operators, provides a Kubernetes CRD-Based API to manage the lifecycle of Elastic Search indices. It allows to provision elasticsearch indices from your Kubernetes cluster, using the ESIndex CRD. 
+
+The Elastic Search access credentials can be specified in requests via reference to a Binding, Secret, or ConfigMap resource. The Binding resource is managed by IBM Cloud Binding Operator in conjuction with IBM Cloud Service Operator. Details can be found at https://github.com/IBM/cloud-operators. 
 
 ## Supported Features
 
-* **Creation and Deletion** - Creates or deletes indices on the subscribed elasticsearch service using the credentials managed by IBM Cloud Operators for Service and Binding.
+* **Creation and Deletion** - Creates, deletes and monitors indices on Elastic Search service.
 
-* **Bind Only Mode** - Allows access to existing elasticsearch indices
-
-## Prerequisites 
-
-* Install IBM Cloud Operators for Services and Bindings: https://github.com/IBM/cloud-operators
+* **Credentials by Reference** - Elasticsearch access credentials can be provided using IBMCloud Binding, Secret, or ConfigMap.
 
 ## Install
 
@@ -42,7 +40,7 @@ Sample yaml files are provided under [config/samples](https://github.com/IBM/esi
  
 You may choose to use anyone of these options.  `esindex.yaml`, `esindex_secret.yaml` and `esindex_configmap.yaml` contain examples for each of them, respectively. The following commands assume the use of Binding.ibmcloud.ibm.com as the source.
 
-1. Create an elasticserch service instance:
+1. Create an elasticserch service instance on IBM Cloud:
 
 ```
 kubectl apply -f config/samples/elasticsearch.yaml
