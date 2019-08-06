@@ -4,13 +4,13 @@
 # IBM Cloud Operator for ElasticSearch Indices
 The IBM Cloud Operator for Elastic Search Indices, as part of IBM Cloud operators, provides a Kubernetes CRD-Based API to manage the lifecycle of Elastic Search indices. It allows to provision elasticsearch indices from your Kubernetes cluster, using the ESIndex CRD. 
 
-The Elastic Search access credentials can be specified in requests via reference to a Binding, Secret, or ConfigMap resource. The Binding resource is managed by IBM Cloud Binding Operator in conjuction with IBM Cloud Service Operator. Details can be found at https://github.com/IBM/cloud-operators. 
+The Elastic Search access credentials can be specified in requests via reference to a Binding, a Secret, or a ConfigMap resource. The Binding resource is managed by IBM Cloud Binding Operator in conjuction with IBM Cloud Service Operator. Details can be found at https://github.com/IBM/cloud-operators. 
 
 ## Supported Features
 
 * **Creation and Deletion** - Creates, deletes and monitors indices on Elastic Search service.
 
-* **Credentials by Reference** - Elasticsearch access credentials can be provided using IBMCloud Binding, Secret, or ConfigMap.
+* **Multiple Credential Source Options** - Elasticsearch access credentials can be provided by refrence to a IBMCloud Binding, a Secret, or a ConfigMap resource.
 
 ## Install
 
