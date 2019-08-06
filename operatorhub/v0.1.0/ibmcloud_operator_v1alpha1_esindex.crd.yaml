@@ -34,7 +34,25 @@ spec:
               description: Bind to an existing index if true, default value false
               type: boolean
             bindingFrom:
-              description: Secret name that holds the elastic search access credentials
+              description: Binding resource name that holds the secret for elastic
+                search credentials
+              properties:
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    TODO: Add other useful fields. apiVersion, kind, uid?'
+                  type: string
+              type: object
+            esURIComposed:
+              description: EsURIComposed is the URI of elasticesearch resource in
+                the format https://<user>:<passwd>@hostname:port. Cannot be used if
+                BindingFrom is not empty.
+              properties:
+                configMapKeyRef:
+                  description: Selects a key of a ConfigMap in the local namespace.
+                  type: object
+                secretKeyRef:
+                  description: Selects a key of a secret in the local namespace
+                  type: object
               type: object
             indexName:
               description: Name of Index to be created on elastic search
@@ -49,7 +67,6 @@ spec:
               type: integer
           required:
           - indexName
-          - bindingFrom
           type: object
         status:
           properties:
