@@ -209,16 +209,7 @@ func (r *ReconcileEsIndex) Reconcile(request reconcile.Request) (reconcile.Resul
 		instance.ObjectMeta.Finalizers = append(instance.ObjectMeta.Finalizers, esindexFinalizer)
 		needUpdate = true
 	}
-	// add owner reference to the instance if not exist already and if bindingFrom is present
-	if instance.Spec.BindingFrom.Name != "" {
-		if !ContainsOwnerReference(instance) {
-			if err := r.setCRDOwnerReference(instance); err != nil {
-				logt.Error(err, "setCRDOwnerReference", "name", instance.ObjectMeta.Name)
-			} else {
-				needUpdate = true
-			}
-		}
-	}
+
 	if needUpdate {
 		r.Update(context, instance)
 	}
