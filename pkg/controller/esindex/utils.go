@@ -32,7 +32,7 @@ import (
 
 	ibmcloudv1alpha1 "github.com/ibm/cloud-operators/pkg/apis/ibmcloud/v1alpha1"
 	esindexv1alpha1 "github.com/ibm/esindex-operator/pkg/apis/ibmcloud/v1alpha1"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -187,7 +187,8 @@ func (r *ReconcileEsIndex) getESUri(obj *esindexv1alpha1.EsIndex) (string, error
 
 	// cretential is specified in binding
 	binding, err := r.getBinding(obj.ObjectMeta.Namespace, obj.Spec.BindingFrom.Name)
-	if err != nil || len(binding.OwnerReferences) < 1 {
+	//if err != nil || len(binding.OwnerReferences) < 1 {
+	if err != nil {
 		logt.Info("failed to get binding", "bindingName", obj.Spec.BindingFrom.Name)
 		return "", err
 	}
